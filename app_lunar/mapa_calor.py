@@ -28,13 +28,15 @@ class grafico_calor():
         xvals, yvals = np.meshgrid(xvals, yvals)
 
         if self.luz2 > 0 and self.luz > 0:
-            pos = 180 - self.luz1
-        elif self.luz2 <= 0 and self.luz > 0:
-            pos = self.luz
-        elif 
+            pos = 90 - self.luz1
+        elif self.luz2 <= 0:
+            pos = self.luz - 90
+        elif self.luz2 > 0 and self.luz <=0:
+            pos = 180 - self.luz2
+        
         
         #z es el producto punto entre un vector de magnitud 1368 normal a la superficie y un vector que indica en qué coordenadas está el sol en su cénit
-        zvals = (-1/2) * self.escala_calor * np.cos(np.deg2rad(yvals)) * np.sin(np.deg2rad(xvals - self.luz - 90))/np.sqrt(1 - ((np.sin(np.deg2rad(yvals)))**2) * ((np.cos(np.deg2rad(xvals - self.luz - 90)))**2))
+        zvals = (-1/2) * self.escala_calor * np.cos(np.deg2rad(yvals)) * np.sin(np.deg2rad(xvals - pos - 90))/np.sqrt(1 - ((np.sin(np.deg2rad(yvals)))**2) * ((np.cos(np.deg2rad(xvals - pos - 90)))**2))
         #z no puede tener valores negativos, pues en esas posiciones no pega el Sol, así que se convierten en 0 al sumarlos con su valor absoluto
         zvals = np.abs(zvals) + zvals
         return zvals

@@ -1,0 +1,8 @@
+numpy>=1.26
+pandas>=2.1
+matplotlib>=3.8
+spiceypy>=6.0
+geopandas
+mpl-point-clicker
+rasterio
+tkcalendar
