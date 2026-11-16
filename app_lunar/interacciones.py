@@ -70,6 +70,8 @@ class mapas_y_puntos:
             self._toolbar.pack_forget()
             mapa =  self.generar_mapas("Earth's angle over moon horizon heatmap", '\nAngle [degree]', 90)
 
+        self._mapa = mapa
+
         #se muestran en la ventana el gráfico y la barra de acciones del mapa de pendiente, la última debe estar en la parte inferior de la ventana
         self._marco.get_tk_widget().pack(side  = TOP)
         self._toolbar.config(background="#0042A6")

@@ -15,6 +15,7 @@ class gui_:
         self.dif_fechas = 24
         self._scroll = None
         self.inst_mapa = None
+        self.modo = "Tierra"
 
     
     def seleccion(self, indice):
@@ -30,12 +31,20 @@ class gui_:
 
     def gen_graf(self, inicio, fin):
         fuente = self.info_graf(self.puntos[0], self.puntos[1], self.puntos[2], inicio, fin)
-        fuente.grafica()
+        fuente.grafica_sol()
+        fuente.grafica_Tierra()
 
-    def desarrollo(self, inicio, fin, target):
+    def desarrollo(self, inicio, fin):
         fuente = self.info_graf([0,0], [90, 0], [0,0], inicio, fin)
-        self.datos = fuente.results["Punto_01"]["data"]
-        self.datos2 = fuente.results["Punto_02"]["data"]
+        if self.modo == "Sol":
+            self.datos = fuente.results["Punto_01"]["data"]
+            self.datos2 = fuente.results["Punto_02"]["data"]
+            target = "solar_elevation_deg"
+        elif self.modo == "Tierra":
+            self.datos = fuente.results2["Punto_01"]["data"]
+            self.datos2 = fuente.results2["Punto_02"]["data"]
+            target = "earth_elevation_deg"
+            
         self.elevacion = self.datos[target]
         self.elevacion2 = self.datos2[target]
         self.dif_fechas = int((fin - inicio).total_seconds() // 3600) + 24
@@ -43,9 +52,13 @@ class gui_:
         self.scroller(0, self.dif_fechas)
 
     def scroller(self, valor, valormax):
-        indice = int(float(valor)*len(self.elevacion)/valormax)
+        progreso = min(max(float(valor) / valormax, 0.0), 1.0)
+        indice = int(progreso * (len(self.elevacion) - 1))
+        indice2 = int(progreso * (len(self.elevacion2) - 1))
         angulo = self.elevacion[indice]
-        angulo2 = self.elevacion2[indice]
+        angulo2 = self.elevacion2[indice2]
+        if self.inst_mapa is None:
+            return
         self.inst_mapa.luz = angulo
         self.inst_mapa.luz2 = angulo2
         self.inst_mapa.act_mapa()
@@ -53,7 +66,7 @@ class gui_:
     def generar(self):
         caja_scroll = Frame(self._canvas)
         self._scroll = Scale(caja_scroll, orient=HORIZONTAL, from_=0, to= self.dif_fechas, command = lambda val: self.scroller(val, self.dif_fechas), label = "hours")
-        self.desarrollo(datetime.date(2027, 1, 1), datetime.date(2027, 1, 1), "solar_elevation_deg")
+        self.desarrollo(datetime.date(2027, 1, 1), datetime.date(2027, 1, 1))
         self._scroll.pack(ipadx = 400, side = LEFT, padx = 50)
         caja_scroll.grid(column=0, row=1)
         pt_1 = Label(self._canvas, text="point 1: ")

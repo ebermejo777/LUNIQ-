@@ -28,7 +28,7 @@ class grafico_calor():
         xvals, yvals = np.meshgrid(xvals, yvals)
 
         if self.luz2 > 0 and self.luz > 0:
-            pos = 90 - self.luz1
+            pos = 90 - self.luz
         elif self.luz2 <= 0:
             pos = self.luz - 90
         elif self.luz2 > 0 and self.luz <=0:

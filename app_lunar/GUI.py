@@ -34,12 +34,19 @@ interaccion = mapas_y_puntos(contador_ = 2, lista_punt_ = [], ventana_ = ventana
 mapa = interaccion.imagen('mapa_color.tif', [2048,1024])
 interaccion._hist_mapas['mapa_color.tif'] = [mapa, interaccion._toolbar, interaccion._marco]
 
+
+def modo_vis(mod, indice):
+    global contenido
+    interaccion.recuperar_mapas(indice)
+    contenido.modo = mod
+    contenido.inst_mapa = interaccion._mapa.ds
+
 #espacio para opciones de mapa
 cambiar = Frame(ventana, bg="#0042A6")
 #botones para volver a cambiar el mapa
-cambio_1 = Button(cambiar, text = 'standard moon map', command = lambda : interaccion.recuperar_mapas(0), bg="#EAFE07", fg = "#07173f")
-cambio_2 = Button(cambiar, text = 'irradiance moon map', command = lambda : interaccion.recuperar_mapas(1), bg="#EAFE07", fg = "#07173f")
-cambio_3 = Button(cambiar, text = 'communication moon map', command = lambda : interaccion.recuperar_mapas(2), bg="#EAFE07", fg = "#07173f")
+cambio_1 = Button(cambiar, text = 'standard moon map', command = lambda : modo_vis("Tierra", 0), bg="#EAFE07", fg = "#07173f")
+cambio_2 = Button(cambiar, text = 'irradiance moon map', command = lambda : modo_vis("Sol", 1), bg="#EAFE07", fg = "#07173f")
+cambio_3 = Button(cambiar, text = 'communication moon map', command = lambda : modo_vis("Tierra", 2), bg="#EAFE07", fg = "#07173f")
 
 #se ubica el botón de cambio de mapa en la interfaz, está debajo del mapa y encima de la barra de acciones
 cambiar.pack(before = interaccion._toolbar, ipady=20, ipadx=40, pady = 15)
@@ -83,7 +90,7 @@ contenido.inst_mapa = interaccion._mapa.ds
 contenido.generar()
 
 #se crean dos puntos, uno para mostrar la iluminación por fecha y otro para generar un grafico
-actualizar = Button(mi_frame, text = "select time interval", command= lambda : contenido.desarrollo(cal_inicio.selection_get(), cal_final.selection_get(), "solar_elevation_deg"))
+actualizar = Button(mi_frame, text = "select time interval", command= lambda : contenido.desarrollo(cal_inicio.selection_get(), cal_final.selection_get()))
 actualizar.grid(column = 1, row = 4, columnspan = 2)
 
 def punto_de_lista(evento):
@@ -96,6 +103,8 @@ def punto_de_lista(evento):
     else:
         indice = 0
     contenido.punto_ = interaccion._lista_punt[indice]
+
+
 
 listado.bind('<<ListboxSelect>>', punto_de_lista)
 
