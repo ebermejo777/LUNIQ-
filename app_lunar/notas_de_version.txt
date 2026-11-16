@@ -1,0 +1,5 @@
+-código de parte inferior de la GUI creado
+-código para hacer gráficas agregado
+-Ahora hay un botón para cada mapa
+-Scroll añadido
+-código de mapa_2D adaptado para tres mapas distintos
